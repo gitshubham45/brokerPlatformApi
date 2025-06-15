@@ -1,0 +1,7 @@
+[
+    { "symbol": "AAPL", "type": "Buy", "price": 150.0, "quantity": 10, "status": "Filled" },
+    { "symbol": "TSLA", "type": "Sell", "price": 265.0, "quantity": 5, "status": "Pending" },
+    { "symbol": "AMZN", "type": "Buy", "price": 131.0, "quantity": 10, "status": "Filled" },
+    { "symbol": "GOOGL", "type": "Buy", "price": 2850.0, "quantity": 5, "status": "Filled" },
+    { "symbol": "MSFT", "type": "Sell", "price": 312.0, "quantity": 10, "status": "Canceled" }
+]

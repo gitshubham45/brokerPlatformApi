@@ -1,0 +1,67 @@
+[
+    {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "quantity": 20,
+      "avgEntryPrice": 148.5,
+      "currentPrice": 152.3,
+      "exitPrice": null,
+      "exposure": 2970,
+      "pnl": {
+        "unrealized": 76,
+        "realized": 0
+      }
+    },
+    {
+      "symbol": "TSLA",
+      "name": "Tesla Inc.",
+      "quantity": 0,
+      "avgEntryPrice": 270.0,
+      "currentPrice": 265.0,
+      "exitPrice": 268.0,
+      "exposure": 0,
+      "pnl": {
+        "unrealized": 0,
+        "realized": -40
+      }
+    },
+    {
+      "symbol": "AMZN",
+      "name": "Amazon.com Inc.",
+      "quantity": 5,
+      "avgEntryPrice": 130.2,
+      "currentPrice": 132.4,
+      "exitPrice": null,
+      "exposure": 651,
+      "pnl": {
+        "unrealized": 11,
+        "realized": 0
+      }
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc.",
+      "quantity": 0,
+      "avgEntryPrice": 2850.0,
+      "currentPrice": 2890.5,
+      "exitPrice": 2870.0,
+      "exposure": 0,
+      "pnl": {
+        "unrealized": 0,
+        "realized": 100
+      }
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "quantity": 10,
+      "avgEntryPrice": 310.0,
+      "currentPrice": 315.7,
+      "exitPrice": null,
+      "exposure": 3100,
+      "pnl": {
+        "unrealized": 57,
+        "realized": 0
+      }
+    }
+]
