@@ -97,7 +97,7 @@ func UserSignup(c *gin.Context) {
 	c.JSON(http.StatusOK , gin.H{
 		"message" : "User created successfully",
 		"user" : map[string]interface{}{
-			"id" : newUser.ID,
+			"_id" : newUser.ID,
 			"email" : newUser.Email,
 			"accessToken" : accessToken,
 			"refreshToken" : refreshToken,
@@ -143,4 +143,15 @@ func UserLogin(c *gin.Context) {
 
 	// update tokens
 	helpers.UpdateTokens(accessToken , refreshToken , foundUser.ID)
+
+	err = userCollection.FindOne(ctx , bson.M{"_id" : foundUser.ID}).Decode(&foundUser)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError , gin.H{"error" : err})
+		return
+	}
+
+	c.JSON(http.StatusOK , gin.H{
+		"message" : "user login successful",
+		"user" : foundUser,
+	})
 }
