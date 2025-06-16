@@ -10,6 +10,7 @@ import (
 	"github.com/gitshubham45/brokerPlatformApi/db"
 	"github.com/gitshubham45/brokerPlatformApi/models"
 	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,7 +19,7 @@ import (
 
 var SECRET_KEY = os.Getenv("SECRET_KEY")
 
-var userCollection *mongo.Collection = db.OpenCollection(db.Client , "user")
+var userCollection *mongo.Collection = db.OpenCollection(db.Client, "user")
 
 type SignedDetails struct {
 	Email string
@@ -29,32 +30,18 @@ type SignedDetails struct {
 func GenerateTokens(user models.User) (string, string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": user.Email,
-		"id" : user.ID,
-		"exp":   time.Now().Local().Add(10 * time.Minute).Unix(),
+		"id":    user.ID,
+		"exp":   time.Now().Local().Add(20 * time.Minute).Unix(),
+		"iat":   time.Now().Local().Unix(),
+		"jti":   uuid.New().String(),
 	})
-
-
-	// claims := SignedDetails{
-	// 	Email: user.Email,
-	// 	ID:    user.ID,
-	// 	StandardClaims: jwt.StandardClaims{
-	// 		ExpiresAt: time.Now().Local().Add((time.Minute * time.Duration(10))).Unix(),
-	// 	},
-	// }
-
-	// refreshClaims := SignedDetails{
-	// 	StandardClaims: jwt.StandardClaims{
-	// 		ExpiresAt: time.Now().Local().Add((time.Hour * time.Duration(24))).Unix(),
-	// 	},
-	// }
 
 	refreshClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"exp" : time.Now().Local().Add(24 * time.Hour).Unix(),
+		"exp": time.Now().Local().Add(24 * time.Hour).Unix(),
+		"jti": uuid.New().String(),
 	})
 
-	// token, _ := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(SECRET_KEY))
 	token, _ := claims.SignedString([]byte(SECRET_KEY))
-	// refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims).SignedString([]byte(SECRET_KEY))
 	refreshToken, err := refreshClaims.SignedString([]byte(SECRET_KEY))
 
 	if err != nil {
@@ -87,7 +74,7 @@ func UpdateTokens(signedAccessToken string, signedRefreshToken string, userId st
 		ctx,
 		filter,
 		bson.D{
-			{Key : "$set" , Value : updateObj},
+			{Key: "$set", Value: updateObj},
 		},
 		&opt,
 	)
@@ -97,14 +84,17 @@ func UpdateTokens(signedAccessToken string, signedRefreshToken string, userId st
 	}
 }
 
-func ValidateTokens(accessToken string) (*jwt.Token , error ){
+func ValidateTokens(accessToken string) (*jwt.Token, error) {
 	token, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
-		return SECRET_KEY, nil
+		return []byte(SECRET_KEY), nil
 	})
 
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
+
+	fmt.Printf("valid : %s", token.Valid)
 
 	if !token.Valid {
 		return nil, fmt.Errorf("invalid token")

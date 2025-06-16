@@ -36,7 +36,11 @@ func Authenticate(c *gin.Context) {
 		return
 	}
 
+	fmt.Printf("token : %s", token)
+
 	claims, ok := token.Claims.(jwt.MapClaims)
+
+	fmt.Printf("claims : %s", claims)
 
 	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
@@ -44,14 +48,12 @@ func Authenticate(c *gin.Context) {
 		return
 	}
 
-	expiry , ok := claims["exp"].(float64)
+	expiry, ok := claims["exp"].(float64)
 	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid expiration time in token"})
 		c.Abort()
 		return
 	}
-
-	fmt.Println("Expiry time - %s" , int(expiry))
 
 	if int64(expiry) < time.Now().Unix() {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "access token expired"})
