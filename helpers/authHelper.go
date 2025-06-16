@@ -102,8 +102,6 @@ func ValidateTokens(accessToken string) (*jwt.Token , error ){
 		return SECRET_KEY, nil
 	})
 
-	
-
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +109,6 @@ func ValidateTokens(accessToken string) (*jwt.Token , error ){
 	if !token.Valid {
 		return nil, fmt.Errorf("invalid token")
 	}
-	
-	
+
 	return token, nil
 }

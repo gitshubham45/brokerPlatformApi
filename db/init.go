@@ -13,12 +13,14 @@ import (
 )
 
 func Init() *mongo.Client {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("error validating .env file")
-	}
 
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Printf("Error loading .env file %s \n", err)
+	}
 	mongoDbUri := os.Getenv("MONGO_URI")
+
+	fmt.Printf("mongoUri : %s \n", mongoDbUri)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -34,7 +36,13 @@ func Init() *mongo.Client {
 
 var Client *mongo.Client = Init()
 
-func OpenCollection(client *mongo.Client , collectionName string) *mongo.Collection {
-	var collection *mongo.Collection = client.Database("cluster0").Collection(collectionName)
+func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Printf("Error loading .env file %s \n", err)
+	}
+	
+	dbName := os.Getenv("DB_NAME")
+	var collection *mongo.Collection = client.Database(dbName).Collection(collectionName)
 	return collection
 }
